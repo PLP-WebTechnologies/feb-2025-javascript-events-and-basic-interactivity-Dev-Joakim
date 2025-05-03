@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sir Kim's Secret Web Lab 🧪</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #eef2f3, #8e9eab);
+      padding: 20px;
+      color: #333;
+    }
+
+    h1, h2 {
+      color: #2c3e50;
+      border-left: 5px solid #3498db;
+      padding-left: 10px;
+    }
+
+    button, input {
+      padding: 10px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      background-color: #2980b9;
+      color: #fff;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .fun-box {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      margin: 15px 0;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+
+    .tab-content {
+      display: none;
+      margin-top: 10px;
+      animation: fadeIn 0.5s ease-in;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .valid { color: green; font-weight: bold; }
+    .invalid { color: crimson; font-weight: bold; }
+  </style>
+</head>
+<body>
+
+  <h1>👨‍🔬 Sir Kim's Secret Web Lab</h1>
+
+  <div class="fun-box">
+    <h2>🎈 Mischievous Events</h2>
+    <button onclick="alert('Sir Kim approves this click!')">Blessed Click ✅</button>
+    <button id="hoverBtn">Hover Magic</button>
+    <input type="text" id="keypressInput" placeholder="Summon your key powers..." />
+    <p id="keyOutput"></p>
+    <button id="secretBtn">Double or Long Press Me 🔒</button>
+    <p id="secretMessage" class="hidden">🧙‍♂️ You've unlocked the wizard mode!</p>
+  </div>
+
+  <div class="fun-box">
+    <h2>🎮 Playroom of UI Tricks</h2>
+    <button id="colorBtn" onclick="toggleColor()">Mystic Color Shift</button>
+
+    <div>
+      <img id="gallery" src="https://placekitten.com/200/200" width="200" alt="Gallery" />
+      <br />
+      <button onclick="nextImage()">Show Me Another Kitty 🐱</button>
+    </div>
+
+    <div class="tabs">
+      <button onclick="showTab(0)">🧩 Mystery Box 1</button>
+      <button onclick="showTab(1)">🎁 Mystery Box 2</button>
+    </div>
+    <div id="tab1" class="tab-content active">
+      <p>You found a virtual cookie 🍪</p>
+    </div>
+    <div id="tab2" class="tab-content">
+      <p>You earned 5 cool points! 🆒</p>
+    </div>
+  </div>
+
+  <div class="fun-box">
+    <h2>📋 Magic Form of Truth</h2>
+    <form onsubmit="return validateForm()">
+      <input type="text" id="name" placeholder="What's your hero name?" required /><br />
+      <input type="email" id="email" placeholder="Magical Email ✉️" required /><br />
+      <input type="password" id="password" placeholder="Secret Code (min 8 chars)" required /><br />
+      <span id="passwordFeedback"></span><br />
+      <button type="submit">Unlock the Portal 🚪</button>
+    </form>
+  </div>
+
+  <script>
+    // Hover effect
+    const hoverBtn = document.getElementById("hoverBtn");
+    hoverBtn.addEventListener("mouseover", () => hoverBtn.textContent = "✨ Hover spell activated!");
+    hoverBtn.addEventListener("mouseout", () => hoverBtn.textContent = "Hover Magic");
+
+    // Keypress
+    document.getElementById("keypressInput").addEventListener("keydown", (e) => {
+      document.getElementById("keyOutput").textContent = `You summoned: "${e.key}"`;
+    });
+
+    // Secret double-click or long-press
+    const secretBtn = document.getElementById("secretBtn");
+    let pressTimer;
+    secretBtn.addEventListener("dblclick", showSecret);
+    secretBtn.addEventListener("mousedown", () => {
+      pressTimer = setTimeout(showSecret, 1000);
+    });
+    secretBtn.addEventListener("mouseup", () => clearTimeout(pressTimer));
+
+    function showSecret() {
+      document.getElementById("secretMessage").classList.remove("hidden");
+    }
+
+    // Button color toggle
+    function toggleColor() {
+      const btn = document.getElementById("colorBtn");
+      btn.style.backgroundColor = btn.style.backgroundColor === "lightgreen" ? "#f39c12" : "lightgreen";
+    }
+
+    // Gallery
+    const images = [
+      "https://placekitten.com/200/200",
+      "https://placekitten.com/201/200",
+      "https://placekitten.com/202/200"
+    ];
+    let currentImg = 0;
+    function nextImage() {
+      currentImg = (currentImg + 1) % images.length;
+      document.getElementById("gallery").src = images[currentImg];
+    }
+
+    // Tabs
+    function showTab(index) {
+      const contents = document.querySelectorAll(".tab-content");
+      contents.forEach((tab, i) => {
+        tab.classList.toggle("active", i === index);
+      });
+    }
+
+    // Form validation
+    function validateForm() {
+      const password = document.getElementById("password").value;
+      if (password.length < 8) {
+        alert("🛑 Your secret code is too weak!");
+        return false;
+      }
+      alert("✅ Portal Unlocked! You may proceed.");
+      return true;
+    }
+
+    // Real-time password feedback
+    document.getElementById("password").addEventListener("input", function() {
+      const feedback = document.getElementById("passwordFeedback");
+      if (this.value.length >= 8) {
+        feedback.textContent = "✔️ Strong code detected!";
+        feedback.className = "valid";
+      } else {
+        feedback.textContent = "❌ Too short!";
+        feedback.className = "invalid";
+      }
+    });
+  </script>
+</body>
+</html>
